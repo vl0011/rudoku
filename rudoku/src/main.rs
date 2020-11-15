@@ -1,24 +1,27 @@
+mod sudoku_type;
+
 fn main() {
     let su = [
-        0, 1, 2, 3, 4, 5, 6, 7, 8 ,
-        9, 10,11,12,13,14,15,16,17,
-        18,19,20,21,22,23,24,25,26,
-        27,28,29,30,31,32,33,34,35,
-        36,37,38,39,40,41,42,43,44,
-        45,46,47,48,49,50,51,52,53,
-        54,55,56,57,58,59,60,61,62,
-        63,64,65,66,67,68,69,70,71,
-        72,73,74,75,76,77,78,79,80
+        7, 0, 2, 0, 4, 8, 0, 0, 0,
+        0, 8, 5, 0, 0, 0, 7, 0, 0,
+        0, 0, 0, 0, 0, 2, 6, 0, 3,
+        0, 0, 0, 6, 0, 1, 4, 0, 2,
+        1, 0, 8, 2, 0, 0, 0, 0, 7,
+        9, 0, 0, 7, 0, 0, 8, 0, 0,
+        0, 0, 0, 0, 0, 3, 0, 4, 1,
+        8, 3, 0, 0, 9, 0, 0, 7, 0,
+        0, 9, 0, 4, 2, 0, 0, 3, 0
     ];
-    let n =33;
-    println!("{:?}", get_my_addr(n));
-    println!("{}", get_my_first_addr(n, 'H').unwrap());
-    println!("{}", get_my_first_addr(n, 'V').unwrap());
-    println!("{}", get_my_first_addr(n, 'M').unwrap());
-    println!("{:?}", get_my_square(&su, n, 'H'));
-    println!("{:?}", get_my_square(&su, n, 'V'));
-    println!("{:?}", get_my_square(&su, n, 'M'));
+
+    let s = sudoku_type::Sudoku::new(&su);
+    s.draw_to_display_q();
+    
 }
+
+
+
+
+
 /*
 fn solve_sudoku(sudoku: &[i32; 81]) -> [i32; 81]
 {
@@ -26,7 +29,7 @@ fn solve_sudoku(sudoku: &[i32; 81]) -> [i32; 81]
 
 }
 
-*/
+
 fn get_my_square(sudoku: &[i32; 81], num: i32, option: char) -> Result<[i32; 9], &'static str>
 {
     let mut ret = [0,0,0,0,0,0,0,0,0];
@@ -106,3 +109,4 @@ fn get_my_first_addr(num: i32, option: char) -> Result<i32, &'static str>
         }
     }
 }
+*/
