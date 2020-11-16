@@ -1,3 +1,5 @@
+use crate::sudoku::*;
+
 impl Sudoku {
     // static function
 
@@ -7,7 +9,7 @@ impl Sudoku {
         Sudoku{
             data: (*su).clone(),
             solve: [0; 81],
-            marking: Vec::new()
+            //marking: Vec::new()
         }
     }
 
@@ -27,11 +29,11 @@ impl Sudoku {
         {
             'H' =>
             {
-                (Sudoku::get_my_addr(num).1 * 9)
+                Sudoku::get_my_addr(num).1 * 9
             },
             'V' =>
             {
-                (Sudoku::get_my_addr(num).0)
+                Sudoku::get_my_addr(num).0
             },
             'M' =>
             {
@@ -126,7 +128,7 @@ impl Sudoku {
                 let h = Sudoku::get_my_first_addr(num, 'H') as usize;
                 for n in 0..ret.len()
                 {
-                    ret[n] = self.data[n + h];
+                    ret[n] = self.solve[n + h];
                 }
                 ret
             },
@@ -134,7 +136,7 @@ impl Sudoku {
                 let v = Sudoku::get_my_first_addr(num, 'V') as usize;
                 for n in 0..ret.len()
                 {
-                    ret[n] = self.data[n * 9 + v];
+                    ret[n] = self.solve[n * 9 + v];
                 }
                 ret
             },
@@ -143,7 +145,7 @@ impl Sudoku {
                 for n in 0..3
                 {
                     for m in 0..3 {
-                        ret[m + 3 * n] = self.data[n * 9 + z + m];
+                        ret[m + 3 * n] = self.solve[n * 9 + z + m];
                     }
                     
                 }
@@ -154,5 +156,57 @@ impl Sudoku {
                 panic!("option err");
             }
         }
+    }
+
+    pub fn solve_sudoku(&mut self)
+    {
+        self.solve = self.data.clone();
+        //self.count = 81;
+        self._solve_sudoku();
+    }
+
+    fn _solve_sudoku(&mut self)
+    {
+        for i in 0..81
+        {
+            if self.solve[i] == 0
+            {
+                let cd = self.get_candidate_num(i as i32);
+                if cd[1] == 0
+                {
+                    self.solve[i] = cd[0];
+                    self._solve_sudoku();
+                }
+            }
+        }
+
+        // TODO:: 공란 있을시 랜덤 입력으로 값 추론
+        //
+    }
+
+    fn get_candidate_num(&self, num: i32) -> [i32; 9]
+    {
+        let h_s = self.get_my_square(num, 'H');
+        let m_s = self.get_my_square(num, 'M');
+        let v_s = self.get_my_square(num, 'V');
+
+        let mut cs = [0; 10];
+        let mut ret = [0; 9];
+        for i in 0..9
+        {
+            cs[h_s[i] as usize] = 1;
+            cs[m_s[i] as usize] = 1;
+            cs[v_s[i] as usize] = 1;
+        }
+        let mut rcount = 0;
+        for i in 1..10
+        {
+            if cs[i] == 0
+            {
+                ret[rcount] = i as i32;
+                rcount = rcount + 1;
+            }
+        }
+        ret
     }
 }
